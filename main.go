@@ -1,6 +1,12 @@
 package main
 
-import "practice.com/price-calculator/price"
+import (
+	"fmt"
+	"strings"
+
+	"practice.com/price-calculator/filemanager"
+	"practice.com/price-calculator/price"
+)
 
 func main() {
 
@@ -9,7 +15,9 @@ func main() {
 	//var result map[float64] []float64 = make(map[float64] []float64)
 
 	for _, taxValue := range taxRate {
-		job := price.NewTaxIncludedPriceJob(taxValue)
+		var outputFileName string = "result" + strings.ReplaceAll(fmt.Sprintf("%f", taxValue), ".", "_") + ".json"
+		fm := filemanager.NewFileManger("prices.txt", outputFileName)
+		job := price.NewTaxIncludedPriceJob(*fm, taxValue)
 		job.PriceProcessing()
 	}
 
