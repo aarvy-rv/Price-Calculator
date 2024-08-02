@@ -3,6 +3,7 @@ package price
 import (
 	"fmt"
 	"math"
+	"strings"
 
 	"practice.com/price-calculator/conversion"
 	"practice.com/price-calculator/filemanager"
@@ -41,7 +42,14 @@ func (job *TaxIncludedPriceJob) PriceProcessing() {
 		result[fmt.Sprintf("%.2f", price)] = math.Round((price*(1+job.TaxRate))*100) / 100 //Rounding to two decimal places
 	}
 
-	fmt.Println(result)
+	job.TaxIncludedPrices = result
+
+	var outputFileName string = "result" + strings.ReplaceAll(fmt.Sprintf("%f", job.TaxRate), ".", "_") + ".json"
+	err := filemanager.WriteToJson(job, outputFileName)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 func NewTaxIncludedPriceJob(taxRate float64) *TaxIncludedPriceJob {
