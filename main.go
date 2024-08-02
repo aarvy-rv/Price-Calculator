@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
-	"practice.com/price-calculator/filemanager"
+	"practice.com/price-calculator/cmdmanager"
 	"practice.com/price-calculator/price"
 )
 
@@ -15,10 +14,15 @@ func main() {
 	//var result map[float64] []float64 = make(map[float64] []float64)
 
 	for _, taxValue := range taxRate {
-		var outputFileName string = "result" + strings.ReplaceAll(fmt.Sprintf("%f", taxValue), ".", "_") + ".json"
-		fm := filemanager.NewFileManger("prices.txt", outputFileName)
-		job := price.NewTaxIncludedPriceJob(*fm, taxValue)
-		job.PriceProcessing()
+		//var outputFileName string = "result" + strings.ReplaceAll(fmt.Sprintf("%f", taxValue), ".", "_") + ".json"
+		//fm := filemanager.NewFileManger("prices.txt", outputFileName)
+		cmd := cmdmanager.NewCmdManager()
+		job := price.NewTaxIncludedPriceJob(cmd, taxValue)
+		err := job.PriceProcessing()
+		if err != nil {
+			fmt.Println("could not process job")
+			fmt.Println(err)
+		}
 	}
 
 }

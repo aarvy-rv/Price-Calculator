@@ -20,7 +20,7 @@ func NewFileManger(inputFile, outputFile string) *FileManager {
 	}
 }
 
-func (fm FileManager) ReadFile() ([]string, error) {
+func (fm FileManager) Read() ([]string, error) {
 	file, err := os.Open(fm.InputFilePath)
 
 	if err != nil {
@@ -47,7 +47,7 @@ func (fm FileManager) ReadFile() ([]string, error) {
 	return lines, nil
 }
 
-func (fm FileManager) WriteToJson(data interface{}) error {
+func (fm FileManager) WriteResults(data interface{}) error {
 	file, err := os.Create(fm.OutputFilePath)
 
 	if err != nil {
