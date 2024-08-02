@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"math"
 	"os"
-	"strconv"
+
+	"practice.com/price-calculator/conversion"
 )
 
 type TaxIncludedPriceJob struct {
@@ -40,20 +41,16 @@ func (job *TaxIncludedPriceJob) LoadData() {
 		return
 	}
 
-	prices := make([]float64, len(lines))
+	prices, err := conversion.StringsToFloats(lines)
 
-	for lineIndex, line := range lines {
-		price, err := strconv.ParseFloat(line, 64)
-		if err != nil {
-			fmt.Println("error in converting string to float64")
-			fmt.Println(err)
-			file.Close()
-			return
-		}
-		prices[lineIndex] = price
+	if err != nil {
+		fmt.Println(err)
+		file.Close()
+		return
 	}
 
 	job.InputPrices = prices
+	file.Close()
 }
 
 func (job *TaxIncludedPriceJob) PriceProcessing() {
